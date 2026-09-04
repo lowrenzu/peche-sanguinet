@@ -34,7 +34,7 @@ export function LakeMap({
       style: "https://tiles.openfreemap.org/styles/dark",
       center: [LAKE.center.lon, LAKE.center.lat],
       zoom: 11,
-      attributionControl: true,
+      attributionControl: { compact: true },
     });
     map.addControl(new maplibregl.NavigationControl({ showCompass: true }), "top-right");
 
@@ -112,7 +112,8 @@ export function LakeMap({
           id: "wind-head",
           type: "line",
           source: "wind-head",
-          paint: { "line-color": "#d4a853", "line-width": 3, "line-cap": "round" },
+          layout: { "line-cap": "round", "line-join": "round" },
+          paint: { "line-color": "#d4a853", "line-width": 3 },
         });
 
         const exposed = exposedShore(LAKE_POLYGON, windDirDeg);

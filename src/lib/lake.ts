@@ -1,4 +1,5 @@
 import type { SectorId } from "./types";
+import lakeGeo from "@/data/lac-cazaux-sanguinet.json";
 
 export const SECTORS: {
   id: SectorId;
@@ -46,11 +47,9 @@ export function sectorById(id: SectorId | string | undefined) {
   return SECTORS.find((s) => s.id === id) ?? SECTORS[0];
 }
 
-import lakeGeo from "@/data/lac-cazaux-sanguinet.json";
-
 type Ring = [number, number][];
 
-export const LAKE_GEOJSON = lakeGeo as {
+export const LAKE_GEOJSON = lakeGeo as unknown as {
   type: "FeatureCollection";
   features: {
     type: "Feature";
