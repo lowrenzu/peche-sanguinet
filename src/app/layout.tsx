@@ -1,25 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, IBM_Plex_Mono } from "next/font/google";
 import { Shell } from "@/components/Shell";
+import "@fontsource/dm-sans/400.css";
+import "@fontsource/dm-sans/500.css";
+import "@fontsource/dm-sans/700.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/600.css";
 import "./globals.css";
-
-const dm = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm",
-});
-
-const plex = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-plex",
-});
 
 export const metadata: Metadata = {
   title: "PêcheSanguinet — Fishing Forecast",
   description:
     "Indice de frénésie environnemental pour les carnassiers du lac de Cazaux-Sanguinet. Données, pas de magie.",
   manifest: "/manifest.json",
-  appleWebApp: { capable: true, title: "PêcheSanguinet", statusBarStyle: "black-translucent" },
+  appleWebApp: {
+    capable: true,
+    title: "PêcheSanguinet",
+    statusBarStyle: "black-translucent",
+  },
 };
 
 export const viewport: Viewport = {
@@ -29,10 +26,14 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="fr">
-      <body className={`${dm.variable} ${plex.variable} font-sans antialiased`}>
+      <body className="antialiased">
         <Shell>{children}</Shell>
         <script
           dangerouslySetInnerHTML={{

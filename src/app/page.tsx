@@ -7,9 +7,11 @@ import { WhyPanel } from "@/components/WhyPanel";
 import { GoFishing } from "@/components/GoFishing";
 import { RefreshButton } from "@/components/RefreshButton";
 import { AlertNotify } from "@/components/AlertNotify";
-import { KindTag, Label, Panel, Stamp, scoreColor } from "@/components/ui";
+import { SpeciesGrid } from "@/components/SpeciesGrid";
+import { KindTag, Label, Panel, Stamp } from "@/components/ui";
 import { formatTime, relativeUpdate } from "@/lib/format";
 import Link from "next/link";
+import { Activity, Map, BookOpen } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -23,8 +25,8 @@ export default async function HomePage() {
         <p className="mt-3 text-lg text-signal-mid">Donnée indisponible</p>
         <p className="mt-2 text-sm text-mist-500">{snap.error}</p>
         <p className="mt-4 text-sm text-mist-300">
-          Aucune valeur n&apos;a été inventée. Réessayez — le cache affichera les dernières données valides dès
-          qu&apos;une requête aura réussi.
+          Aucune valeur n&apos;a été inventée. Réessayez — le cache affichera
+          les dernières données valides dès qu&apos;une requête aura réussi.
         </p>
       </Panel>
     );
@@ -32,12 +34,20 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-end justify-between gap-2">
+      {/* ── Page header ── */}
+      <div className="anim-fade-in-up flex flex-wrap items-end justify-between gap-2">
         <div>
-          <p className="text-sm text-mist-500">Voici ce qui se passe actuellement sur le lac.</p>
-          <h1 className="text-2xl font-semibold">Tableau de bord {snap.sector.name}</h1>
+          <p className="text-sm text-mist-500">
+            Conditions en temps réel sur le lac.
+          </p>
+          <h1 className="text-2xl font-semibold">
+            Tableau de bord{" "}
+            <span className="text-teal">{snap.sector.name}</span>
+          </h1>
           {!snap.sector.primary && (
-            <p className="text-xs text-gold">Territoire d&apos;extension — modèle non calibré localement.</p>
+            <p className="text-xs text-gold">
+              Territoire d&apos;extension — modèle non calibré localement.
+            </p>
           )}
         </div>
         <div className="flex items-center gap-2">
@@ -45,31 +55,41 @@ export default async function HomePage() {
           <Stamp
             text={
               snap.source.stale
-                ? `Dernières données disponibles : ${relativeUpdate(snap.source.fetchedAt)}`
-                : `Données mises à jour ${relativeUpdate(snap.source.fetchedAt)}`
+                ? `Dernières données : ${relativeUpdate(snap.source.fetchedAt)}`
+                : `Mis à jour ${relativeUpdate(snap.source.fetchedAt)}`
             }
           />
         </div>
       </div>
 
+      {/* ── Alerts ── */}
       <AlertNotify alerts={snap.alerts} enabled={snap.config.notifications} />
       {snap.alerts.map((a) => (
-        <div key={a.id} className="rounded-2xl border border-gold/30 bg-gold/10 px-4 py-3">
+        <div
+          key={a.id}
+          className="anim-fade-in-up rounded-2xl border border-gold/30 bg-gold/10 px-4 py-3"
+        >
           <p className="font-semibold text-gold">{a.title}</p>
           <p className="text-sm text-mist-300">{a.body}</p>
         </div>
       ))}
 
+      {/* ── Hero score ── */}
       <ScoreHero snap={snap} />
+
+      {/* ── Go fishing CTA ── */}
       <GoFishing />
+
+      {/* ── Condition cards ── */}
       <ConditionCards snap={snap} />
 
-      <Panel>
+      {/* ── Hourly timeline ── */}
+      <Panel className="anim-fade-in-up">
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div>
             <Label>Les 24 prochaines heures</Label>
-            <p className="mt-1 text-sm text-mist-500">
-              Anneau blanc = maintenant. Or = pic.{" "}
+            <p className="mt-1 text-xs text-mist-500">
+              Anneau = maintenant · ✦ = pic de frénésie.{" "}
               {snap.window
                 ? `Meilleure fenêtre ${formatTime(snap.window.from)}–${formatTime(snap.window.to)} (IF ${snap.window.peak}).`
                 : "Créneau indisponible."}
@@ -82,62 +102,81 @@ export default async function HomePage() {
         </div>
       </Panel>
 
-      <Panel>
+      {/* ── 72h trend ── */}
+      <Panel className="anim-fade-in-up">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <Label>Tendance 72 heures</Label>
           <KindTag kind="maintenant + pics" />
         </div>
-        <p className="mb-2 mt-1 text-sm text-mist-500">
-          Trait blanc = heure actuelle. Bandes or = meilleures heures pour pêcher selon l&apos;IF.
+        <p className="mb-2 mt-1 text-xs text-mist-500">
+          Trait blanc = heure actuelle · Bandes or = meilleures heures selon
+          l&apos;IF.
         </p>
         <TrendChart points={snap.hourly} />
       </Panel>
 
+      {/* ── Why panel ── */}
       <WhyPanel snap={snap} />
 
+      {/* ── Missing data ── */}
       {snap.missing.length > 0 && (
-        <Panel>
+        <Panel className="anim-fade-in-up">
           <Label>Données manquantes</Label>
-          <p className="mt-2 text-sm text-mist-300">{snap.missing.join(" · ")}</p>
+          <p className="mt-2 text-sm text-mist-300">
+            {snap.missing.join(" · ")}
+          </p>
         </Panel>
       )}
 
+      {/* ── Local stats ── */}
       {snap.localStats.n > 0 && (
-        <Panel>
+        <Panel className="anim-fade-in-up">
           <Label>Ce que vos captures permettent d&apos;apprendre</Label>
           <p className="mt-2 text-sm text-mist-300">
-            {snap.localStats.n} prise{snap.localStats.n > 1 ? "s" : ""} dans le journal.{" "}
-            {snap.localStats.alignment.note}
+            {snap.localStats.n} prise{snap.localStats.n > 1 ? "s" : ""} dans
+            le journal. {snap.localStats.alignment.note}
           </p>
-          <Link href="/analyse" className="mt-2 inline-block text-sm text-teal">
-            Voir l&apos;analyse locale
+          <Link
+            href="/analyse"
+            className="mt-2 inline-flex items-center gap-1 text-sm text-teal hover:underline"
+          >
+            Voir l&apos;analyse locale →
           </Link>
         </Panel>
       )}
 
-      <Panel>
-        <Label>Par espèce — indicatif V1</Label>
-        <p className="mt-1 text-xs text-mist-500">{snap.speciesDisclaimer}</p>
-        <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-          {snap.species.map((s) => (
-            <div key={s.id} className="rounded-xl bg-ink-700 px-3 py-3">
-              <p className="text-xs uppercase tracking-wider text-mist-500">{s.label}</p>
-              <p className={`font-mono text-2xl tabular ${scoreColor(s.score)}`}>{s.score ?? "—"}</p>
-              {s.calibrated && <p className="text-[10px] text-gold">calibré</p>}
-            </div>
-          ))}
+      {/* ── Species grid ── */}
+      <Panel className="anim-fade-in-up">
+        <div className="flex items-center justify-between gap-2">
+          <Label>Par espèce — indicatif V1</Label>
+          <KindTag kind="modèle" />
         </div>
+        <p className="mt-1 text-xs text-mist-500">{snap.speciesDisclaimer}</p>
+        <SpeciesGrid species={snap.species} />
       </Panel>
 
-      <div className="flex flex-wrap gap-2 text-sm">
-        <Link className="rounded-lg bg-ink-700 px-3 py-2" href="/prevision">
+      {/* ── Quick nav links ── */}
+      <div className="anim-fade-in-up flex flex-wrap gap-2 text-sm">
+        <Link
+          className="flex items-center gap-2 rounded-xl border border-white/10 bg-ink-700 px-4 py-2.5 text-mist-100 transition-colors hover:border-teal/30 hover:bg-ink-600"
+          href="/prevision"
+        >
+          <Activity className="h-4 w-4 text-teal" />
           Prévision détaillée
         </Link>
-        <Link className="rounded-lg bg-ink-700 px-3 py-2" href="/carte">
+        <Link
+          className="flex items-center gap-2 rounded-xl border border-white/10 bg-ink-700 px-4 py-2.5 text-mist-100 transition-colors hover:border-teal/30 hover:bg-ink-600"
+          href="/carte"
+        >
+          <Map className="h-4 w-4 text-teal" />
           Carte du lac
         </Link>
-        <Link className="rounded-lg bg-ink-700 px-3 py-2" href="/sources">
-          Sources & méthodologie
+        <Link
+          className="flex items-center gap-2 rounded-xl border border-white/10 bg-ink-700 px-4 py-2.5 text-mist-100 transition-colors hover:border-teal/30 hover:bg-ink-600"
+          href="/sources"
+        >
+          <BookOpen className="h-4 w-4 text-teal" />
+          Sources &amp; méthodologie
         </Link>
       </div>
     </div>

@@ -36,7 +36,7 @@ export interface OpenMeteoArchive {
   };
 }
 
-async function fetchJson<T>(url: string, timeoutMs = 18000): Promise<T> {
+async function fetchJson<T>(url: string, timeoutMs = 6000): Promise<T> {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
@@ -96,7 +96,7 @@ export async function loadArchive(years = 5) {
       loader: () =>
         fetchJson<OpenMeteoArchive>(
           `${ARCHIVE_URL}?${p.qs}&start_date=${startStr}&end_date=${endStr}&daily=temperature_2m_mean,pressure_msl_mean,wind_speed_10m_mean,wind_direction_10m_dominant,cloud_cover_mean&wind_speed_unit=kmh`,
-          25000,
+          5000,
         ),
     });
   } catch (e) {

@@ -54,14 +54,24 @@ export async function cachedFetch<T>(opts: {
 
   try {
     const payload = await opts.loader();
-    const saved = await setCached(opts.key, opts.source, payload);
-    return {
-      data: payload,
-      fetchedAt: saved.fetchedAt,
-      fromCache: false,
-      stale: false,
-      source: opts.source,
-    };
+    try {
+      const saved = await setCached(opts.key, opts.source, payload);
+      return {
+        data: payload,
+        fetchedAt: saved.fetchedAt,
+        fromCache: false,
+        stale: false,
+        source: opts.source,
+      };
+    } catch {
+      return {
+        data: payload,
+        fetchedAt: new Date().toISOString(),
+        fromCache: false,
+        stale: false,
+        source: opts.source,
+      };
+    }
   } catch (err) {
     if (existing) {
       return {

@@ -12,3 +12,5 @@ public/uploads
 .env.local
 .DS_Store
 tmp-deploy
+.netlify
+*.zip
