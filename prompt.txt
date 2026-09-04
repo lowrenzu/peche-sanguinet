@@ -1,0 +1,1133 @@
+Oui. Voici un **prompt maître**, conçu pour être donné à une IA de développement (Replit Agent, Cursor, Claude Code, Codex, etc.) afin qu’elle ne crée pas seulement une maquette, mais **une application fonctionnelle et évolutive**.
+
+### Prompt maître — PêcheSanguinet / Fishing Forecast
+
+# PROMPT MAÎTRE — PÊCHESANGUINET
+
+## Application intelligente de prévision de pêche — Lac de Cazaux-Sanguinet, France
+
+Tu es un **Lead Product Designer + UX/UI Designer + Full-Stack Engineer + Data Engineer + Data Scientist spécialisé dans les systèmes prédictifs environnementaux**.
+
+Ta mission est de concevoir et développer une application web/mobile moderne appelée :
+
+# 🎣 PÊCHESANGUINET
+
+### Fishing Forecast — Lac de Cazaux-Sanguinet
+
+L'objectif est de créer un véritable **outil d'aide à la décision pour la pêche des carnassiers**, centré exclusivement sur le secteur de Sanguinet et le lac de Cazaux-Sanguinet.
+
+L'application doit exploiter des **données météorologiques actuelles, prévisionnelles et historiques**, des données relatives à la température de l'eau et, progressivement, les observations réelles des pêcheurs.
+
+Le système doit être **scientifique, transparent, explicable et basé sur des données**.
+
+NE PAS utiliser :
+
+* astrologie
+* phases lunaires comme facteur prédictif principal
+* croyances populaires non vérifiées
+* pseudo-science
+* scores arbitraires présentés comme des vérités scientifiques
+
+---
+
+# 1. OBJECTIF PRINCIPAL
+
+L'application doit répondre à une question simple :
+
+> "Est-ce que les conditions actuelles et prévues sont favorables à l'activité des carnassiers sur le lac de Cazaux-Sanguinet, et quand est-il statistiquement le plus intéressant de pêcher ?"
+
+Le système doit produire :
+
+## INDICE DE FRÉNÉSIE — IF
+
+Score de 0 à 100.
+
+Exemple :
+
+**82 / 100**
+TRÈS FAVORABLE
+
+Mais le score ne doit jamais être affiché seul.
+
+L'application doit toujours expliquer :
+
+* pourquoi le score est élevé ou faible ;
+* quels facteurs influencent le résultat ;
+* quelle donnée a le plus d'impact ;
+* comment les conditions évoluent ;
+* quel créneau horaire semble le plus favorable ;
+* quel est le niveau de confiance de la prédiction.
+
+---
+
+# 2. ZONE GÉOGRAPHIQUE
+
+Zone principale :
+
+**Sanguinet, Landes, France**
+
+Centre d'intérêt :
+
+**Lac de Cazaux-Sanguinet**
+
+Prévoir une architecture permettant ultérieurement d'étendre l'application à :
+
+* Biscarrosse
+* Parentis-en-Born
+* Cazaux
+* autres lacs des Landes
+
+La zone Sanguinet doit rester le territoire principal de la première version.
+
+---
+
+# 3. DONNÉES MÉTÉOROLOGIQUES
+
+Intégrer les données suivantes.
+
+## Données actuelles
+
+* température de l'air
+* température ressentie
+* pression atmosphérique
+* évolution de la pression
+* vitesse du vent
+* direction du vent
+* rafales
+* couverture nuageuse
+* précipitations
+* humidité
+* visibilité si disponible
+* lever/coucher du soleil
+
+## Prévisions
+
+Prévoir au minimum :
+
+* prochaines 24 heures
+* prochaines 48 heures
+* prochaines 72 heures
+* prévision quotidienne jusqu'à 7 jours si les données disponibles le permettent
+
+## Historique
+
+Construire une base historique permettant de comparer les conditions actuelles avec :
+
+* les jours précédents
+* les mêmes périodes saisonnières
+* les années précédentes
+* les situations météorologiques similaires
+
+Utiliser en priorité des sources météorologiques fiables et documentées.
+
+Architecture prévue pour utiliser notamment :
+
+* Open-Meteo
+* ERA5 / ERA5-Land
+* Météo-France / données publiques lorsque pertinentes
+* autres sources fiables si nécessaire
+
+IMPORTANT :
+
+Ne jamais mélanger silencieusement plusieurs sources incompatibles.
+
+Chaque donnée doit conserver :
+
+* source
+* date/heure
+* unité
+* précision
+* statut observation/prévision
+* éventuellement qualité/confiance
+
+---
+
+# 4. TEMPÉRATURE DE L'EAU
+
+La température de l'eau est une donnée centrale.
+
+Ne jamais remplacer automatiquement la température de l'eau par la température de l'air.
+
+Créer un module spécifique :
+
+## WATER TEMPERATURE ENGINE
+
+Il doit pouvoir gérer :
+
+* température actuelle de surface
+* historique
+* évolution 6 h
+* évolution 12 h
+* évolution 24 h
+* évolution 72 h
+* moyenne mobile
+* anomalie par rapport à la normale saisonnière
+
+Prévoir plusieurs méthodes d'acquisition :
+
+1. station de mesure lorsqu'elle existe ;
+2. données publiques ;
+3. données environnementales ;
+4. estimation/modélisation clairement identifiée comme telle.
+
+Si une donnée est estimée, l'interface doit l'indiquer explicitement :
+
+**Température estimée — confiance moyenne**
+
+Ne jamais présenter une estimation comme une mesure réelle.
+
+---
+
+# 5. MOTEUR DE PRÉDICTION
+
+Créer un moteur modulaire appelé :
+
+## FISHING FORECAST ENGINE
+
+Le moteur doit calculer l'Indice de Frénésie.
+
+Version initiale :
+
+### Température de l'eau
+
+30 %
+
+### Pression et variation de pression
+
+20 %
+
+### Vent
+
+20 %
+
+### Nébulosité / luminosité
+
+15 %
+
+### Similarité historique
+
+15 %
+
+Ces pondérations doivent être configurables dans le backend.
+
+NE PAS considérer ces coefficients comme scientifiquement définitifs.
+
+Ils constituent uniquement le modèle V1.
+
+---
+
+# 6. ANALYSE DES VARIATIONS
+
+Le moteur doit privilégier les **tendances et variations** plutôt que les valeurs isolées.
+
+Exemple :
+
+Une pression de 1015 hPa seule ne signifie pas automatiquement "bonne pêche".
+
+Analyser :
+
+* pression actuelle
+* pression à -3 h
+* pression à -6 h
+* pression à -12 h
+* pression à -24 h
+
+Calculer :
+
+* variation
+* vitesse de variation
+* stabilité
+* tendance
+
+Même principe pour :
+
+* température de l'eau
+* vent
+* couverture nuageuse
+* température de l'air
+
+---
+
+# 7. ANALYSE DU VENT
+
+Le vent doit être traité comme une donnée vectorielle.
+
+Stocker :
+
+* vitesse
+* direction en degrés
+* direction cardinale
+* rafales
+* durée
+* évolution
+
+Exemple :
+
+N
+NE
+E
+SE
+S
+SO
+O
+NO
+
+Créer également une visualisation :
+
+## WIND MAP
+
+Afficher :
+
+* direction du vent
+* intensité
+* évolution prévue
+* zones du lac exposées
+
+À terme, permettre de croiser le vent avec la morphologie du lac.
+
+---
+
+# 8. INDICE DE FRÉNÉSIE
+
+Le score final doit être décomposé.
+
+Exemple :
+
+```text
+INDICE DE FRÉNÉSIE
+
+82 / 100
+
+Température eau       +25
+Pression              +17
+Vent                  +16
+Nébulosité             +11
+Historique             +13
+--------------------------
+TOTAL                  82
+```
+
+Créer également :
+
+### Niveau
+
+0–20   TRÈS MAUVAIS
+21–40  FAIBLE
+41–60  MOYEN
+61–75  BON
+76–90  TRÈS BON
+91–100 EXCEPTIONNEL
+
+Ces seuils doivent être configurables.
+
+---
+
+# 9. CONFIANCE DU MODÈLE
+
+Ajouter un deuxième indicateur :
+
+## CONFIANCE
+
+Exemple :
+
+**78 % de confiance**
+
+La confiance dépend notamment :
+
+* quantité de données disponibles
+* fraîcheur des données
+* qualité des mesures
+* cohérence des différentes sources
+* quantité d'historique comparable
+
+IMPORTANT :
+
+Un score de pêche élevé avec une faible confiance doit être présenté comme tel.
+
+Exemple :
+
+> IF 84/100
+> Confiance : 54 %
+>
+> "Conditions théoriquement très favorables, mais peu de situations historiques comparables."
+
+---
+
+# 10. SIMILARITÉ HISTORIQUE
+
+Créer un moteur :
+
+## HISTORICAL MATCHING ENGINE
+
+Il recherche dans l'historique les journées présentant des conditions similaires.
+
+Comparer :
+
+* température eau
+* température air
+* pression
+* évolution pression
+* vent
+* direction vent
+* nébulosité
+* saison
+* heure
+
+Afficher par exemple :
+
+> 27 journées historiques similaires trouvées.
+
+Puis :
+
+> Activité favorable dans 68 % des situations comparables.
+
+ATTENTION :
+
+Ne pas inventer de statistiques si aucune donnée réelle de captures n'existe.
+
+Faire la distinction entre :
+
+### Similarité météorologique
+
+et
+
+### Probabilité réelle de capture
+
+Tant que l'application ne possède pas suffisamment de données de pêche, parler de :
+
+**"conditions historiquement similaires"**
+
+et non de :
+
+**"probabilité de prendre un brochet".**
+
+---
+
+# 11. JOURNAL DE PÊCHE
+
+Créer un module :
+
+## CATCH LOG
+
+Le pêcheur peut enregistrer :
+
+* date
+* heure
+* position
+* espèce
+* taille
+* poids si connu
+* leurre
+* technique
+* profondeur
+* météo
+* température eau
+* vent
+* pression
+* commentaires
+* photo
+
+Les conditions météo doivent être automatiquement associées à la capture.
+
+Exemple :
+
+```text
+BROCHET
+78 cm
+
+12 septembre 2026
+17:42
+
+Eau : 19.8 °C
+Pression : 1014 hPa
+Vent : O 13 km/h
+Nuages : 72 %
+
+IF au moment de la capture :
+84/100
+```
+
+---
+
+# 12. APPRENTISSAGE PROGRESSIF
+
+Lorsque suffisamment de données réelles seront disponibles, créer une architecture permettant d'améliorer le modèle.
+
+Ne pas commencer par un modèle IA complexe inutilement.
+
+Architecture :
+
+### V1
+
+Règles + scoring pondéré
+
+### V2
+
+Analyse statistique
+
+### V3
+
+Machine Learning
+
+### V4
+
+Modèle prédictif local spécifique à Sanguinet
+
+Le système doit pouvoir comparer :
+
+**prévision → conditions réelles → activité observée**
+
+afin d'améliorer progressivement les pondérations.
+
+---
+
+# 13. PRÉVISION PAR HEURE
+
+Créer une timeline :
+
+```text
+06h   07h   08h   09h   10h   11h
+72    75    81    84    79    73
+
+12h   13h   14h   15h   16h   17h
+68    65    69    76    84    89
+
+18h   19h   20h   21h
+91    88    79    64
+```
+
+Identifier automatiquement :
+
+## MEILLEUR CRÉNEAU
+
+Exemple :
+
+**17h30 → 19h30**
+
+avec justification.
+
+---
+
+# 14. TABLEAU DE BORD
+
+Créer un dashboard moderne.
+
+Écran principal :
+
+### HEADER
+
+PêcheSanguinet
+Lac de Cazaux-Sanguinet
+
+### HERO
+
+```text
+78
+INDICE DE FRÉNÉSIE
+TRÈS BON
+```
+
+### CONDITIONS
+
+Cartes :
+
+🌡 Eau
+20.7 °C
+
+🧭 Pression
+1016 hPa
+↓ -3 hPa / 12h
+
+💨 Vent
+14 km/h
+Ouest
+
+☁ Nuages
+65 %
+
+### MEILLEUR MOMENT
+
+17h00 — 20h00
+
+### TENDANCE
+
+Graphique 72 heures.
+
+---
+
+# 15. CARTE DU LAC
+
+Créer une carte interactive.
+
+Afficher :
+
+* contour du lac
+* Sanguinet
+* principales zones
+* direction du vent
+* intensité du vent
+* éventuellement zones exposées
+
+Architecture prévue pour pouvoir ajouter ultérieurement :
+
+* profondeur
+* bathymétrie
+* végétation
+* structures
+* hauts-fonds
+* arrivées d'eau
+* zones de pêche enregistrées par l'utilisateur
+
+Ne pas inventer de données bathymétriques.
+
+---
+
+# 16. PRÉVISION PAR ESPÈCE
+
+Préparer l'architecture pour :
+
+### BROCHET
+
+### SANDRE
+
+### PERCHE
+
+### BLACK-BASS
+
+### SILURE
+
+### ANGUILLE
+
+Chaque espèce doit pouvoir avoir un modèle différent.
+
+Exemple :
+
+```text
+BROCHET
+IF : 84
+
+SANDRE
+IF : 71
+
+PERCHE
+IF : 79
+
+BLACK-BASS
+IF : 62
+```
+
+Les modèles spécifiques ne doivent être activés que lorsque les données scientifiques/statistiques nécessaires sont suffisantes.
+
+---
+
+# 17. EXPLICATION DU SCORE
+
+Créer une section :
+
+## POURQUOI ?
+
+Exemple :
+
+> Conditions favorables aujourd'hui.
+
+> La température de l'eau est dans une plage favorable au modèle actuel.
+
+> La pression baisse progressivement depuis 8 heures.
+
+> Le vent d'ouest modéré augmente l'intérêt des secteurs exposés.
+
+> La couverture nuageuse réduit la luminosité.
+
+> 31 journées historiques présentent des conditions comparables.
+
+---
+
+# 18. HISTORIQUE
+
+Créer une page :
+
+## HISTORIQUE SANGUINET
+
+Graphiques :
+
+* température eau
+* température air
+* pression
+* vent
+* nébulosité
+* IF
+
+Permettre de sélectionner :
+
+* 24 h
+* 7 jours
+* 30 jours
+* 1 an
+* 5 ans
+* période personnalisée
+
+---
+
+# 19. DESIGN UI / UX
+
+Style :
+
+## "Scientific Fishing Dashboard"
+
+Premium mais sobre.
+
+Éviter :
+
+* interface gadget
+* couleurs criardes
+* design "application météo générique"
+* surcharge d'informations
+
+Créer une esthétique :
+
+* sombre
+* élégante
+* technique
+* lisible en extérieur
+* gros chiffres
+* graphiques très lisibles
+* cartes minimalistes
+
+L'application doit être utilisable avec un téléphone en plein soleil.
+
+Prévoir :
+
+* contraste élevé
+* grandes zones tactiles
+* navigation simple
+* mode mobile prioritaire
+
+---
+
+# 20. NAVIGATION
+
+Navigation principale :
+
+```text
+ACCUEIL
+PRÉVISION
+CARTE
+HISTORIQUE
+CAPTURES
+ANALYSE
+PARAMÈTRES
+```
+
+---
+
+# 21. STACK TECHNIQUE
+
+Utiliser une architecture moderne.
+
+Frontend :
+
+* Next.js
+* React
+* TypeScript
+* Tailwind CSS
+
+Backend :
+
+* API Routes / Server Actions ou backend dédié
+* PostgreSQL
+
+Cartographie :
+
+* MapLibre ou solution équivalente
+
+Graphiques :
+
+* Recharts ou équivalent
+
+Authentification :
+
+prévoir une architecture permettant ultérieurement :
+
+* compte utilisateur
+* synchronisation
+* journal de captures
+
+---
+
+# 22. BASE DE DONNÉES
+
+Créer des tables propres.
+
+Exemple :
+
+```text
+weather_observations
+weather_forecasts
+water_temperature
+fishing_scores
+historical_conditions
+fishing_sessions
+catches
+locations
+users
+```
+
+Chaque donnée doit comporter :
+
+* timestamp
+* latitude
+* longitude si applicable
+* source
+* valeur
+* unité
+* qualité
+* created_at
+
+---
+
+# 23. API
+
+Créer une couche d'abstraction :
+
+```text
+/weather/current
+/weather/forecast
+/weather/history
+/water/current
+/water/history
+/fishing/index
+/fishing/hourly
+/fishing/historical-match
+/catches
+```
+
+Ne jamais coupler directement l'interface utilisateur à une API météo externe.
+
+Créer un service intermédiaire :
+
+```text
+WeatherProvider
+WaterProvider
+FishingEngine
+HistoricalEngine
+```
+
+Cela permettra de changer de fournisseur sans réécrire l'application.
+
+---
+
+# 24. CACHE ET MISE À JOUR
+
+Les données météo ne doivent pas être récupérées inutilement à chaque ouverture.
+
+Mettre en place :
+
+* cache
+* timestamps
+* renouvellement automatique
+* gestion des erreurs
+* fallback
+
+Afficher :
+
+> Données mises à jour il y a 12 min.
+
+Si une API est indisponible :
+
+> Dernières données disponibles : 42 min.
+
+Ne jamais afficher de fausses données.
+
+---
+
+# 25. QUALITÉ DES DONNÉES
+
+Chaque source doit être identifiée.
+
+Créer un système :
+
+```text
+DATA QUALITY
+
+★★★★★ excellente
+★★★★☆ bonne
+★★★☆☆ moyenne
+★★☆☆☆ faible
+★☆☆☆☆ très faible
+```
+
+La qualité doit influencer la **confiance**, pas artificiellement le score de pêche.
+
+---
+
+# 26. ALERTES
+
+Prévoir :
+
+## FISHING ALERT
+
+Exemple :
+
+> 🎣 Fenêtre favorable détectée
+>
+> Aujourd'hui 17h20 → 20h10
+>
+> IF prévu : 88
+>
+> Confiance : 81 %
+
+Prévoir également :
+
+* changement brutal de pression
+* changement de vent
+* variation importante de température
+* conditions exceptionnelles
+
+---
+
+# 27. MODE "JE VAIS PÊCHER"
+
+Créer un bouton principal :
+
+# 🎣 JE VAIS PÊCHER
+
+L'application demande :
+
+* heure de départ
+* durée prévue
+* espèce ciblée
+
+Puis génère :
+
+### PLAN DE PÊCHE
+
+```text
+Départ : 15h30
+
+15h30–17h00
+IF 72
+Conditions favorables
+
+17h00–19h30
+IF 89
+MEILLEURE FENÊTRE
+
+19h30–21h00
+IF 76
+Conditions encore favorables
+```
+
+---
+
+# 28. DONNÉES ET TRANSPARENCE
+
+Créer une page :
+
+## SOURCES & MÉTHODOLOGIE
+
+Expliquer clairement :
+
+* quelles données sont utilisées
+* quelles sont leurs sources
+* quelles sont mesurées
+* quelles sont estimées
+* comment fonctionne l'IF
+* limites du modèle
+* niveau de confiance
+
+L'application ne doit jamais prétendre :
+
+> "Vous allez attraper un brochet."
+
+Elle doit dire :
+
+> "Les conditions environnementales correspondent actuellement à une configuration historiquement favorable selon notre modèle."
+
+---
+
+# 29. RESPONSIVE
+
+L'application doit être parfaite sur :
+
+* smartphone
+* tablette
+* desktop
+
+Priorité :
+
+**Mobile → Desktop**
+
+---
+
+# 30. PWA
+
+Transformer l'application en PWA.
+
+Fonctionnalités :
+
+* installation sur téléphone
+* icône
+* fonctionnement partiellement hors connexion
+* cache des dernières données
+* notifications si supportées
+
+---
+
+# 31. PAGE ADMIN
+
+Créer une interface administrateur permettant de visualiser :
+
+* état des APIs
+* dernière mise à jour
+* données manquantes
+* erreurs
+* historique des scores
+* paramètres du modèle
+* pondérations
+* statistiques du moteur
+
+---
+
+# 32. TESTS
+
+Créer des tests pour :
+
+* calcul IF
+* variation pression
+* calcul vent
+* température eau
+* historique
+* API
+* fallback
+* données manquantes
+
+Créer également des tests avec des jeux de données historiques fictifs.
+
+---
+
+# 33. IMPORTANT : NE PAS SURPROMETTRE
+
+Si une donnée n'est pas disponible :
+
+NE PAS inventer.
+
+Afficher :
+
+> Donnée indisponible.
+
+ou :
+
+> Estimation.
+
+Toujours distinguer :
+
+**MESURE**
+
+**PRÉVISION**
+
+**ESTIMATION**
+
+**MODÈLE**
+
+---
+
+# 34. ROADMAP
+
+Construire le projet par étapes.
+
+## PHASE 1 — MVP
+
+* dashboard
+* météo actuelle
+* prévisions
+* température eau
+* pression
+* vent
+* nuages
+* IF
+* graphique 72 h
+* responsive
+
+## PHASE 2
+
+* historique
+* comparaison historique
+* carte
+* alertes
+* meilleur créneau
+
+## PHASE 3
+
+* journal de pêche
+* captures
+* association automatique météo/capture
+
+## PHASE 4
+
+* analyse statistique locale
+* modèle par espèce
+
+## PHASE 5
+
+* machine learning
+* prédiction personnalisée à Sanguinet
+* extension Biscarrosse / Parentis
+
+---
+
+# 35. RÈGLE DE DÉVELOPPEMENT
+
+NE PAS produire uniquement une maquette statique.
+
+Je veux une **application fonctionnelle**.
+
+Commencer par :
+
+1. créer l'architecture du projet ;
+2. connecter les APIs météo ;
+3. récupérer les données réelles de Sanguinet ;
+4. construire la base de données ;
+5. calculer l'IF ;
+6. créer le dashboard ;
+7. afficher les données en temps réel ;
+8. créer le graphique 72 h ;
+9. ajouter l'historique ;
+10. tester l'ensemble.
+
+Chaque fonctionnalité doit être réellement connectée.
+
+---
+
+# 36. OBJECTIF FINAL
+
+Le produit final doit donner l'impression d'un :
+
+## "Bloomberg Terminal de la pêche"
+
+mais simplifié pour un pêcheur.
+
+À l'ouverture :
+
+**"Voici ce qui se passe actuellement sur le lac."**
+
+Puis :
+
+**"Voici comment les conditions vont évoluer."**
+
+Puis :
+
+**"Voici les créneaux les plus intéressants."**
+
+Puis :
+
+**"Voici pourquoi le modèle pense cela."**
+
+Et enfin :
+
+**"Voici ce que les données historiques et vos propres captures permettent d'apprendre."**
+
+Le système doit devenir progressivement **spécifique au lac de Cazaux-Sanguinet**, plutôt qu'un simple agrégateur météo.
+
+Construire une première version propre, fonctionnelle et immédiatement testable, puis améliorer l'algorithme par itérations.
+
+Ce prompt est volontairement conçu pour éviter un piège fréquent : **faire une belle interface météo qui prétend prédire la pêche sans disposer des données nécessaires**. La V1 produit un indice environnemental explicable ; les captures réelles permettront ensuite de construire un modèle statistique réellement spécifique à Sanguinet.

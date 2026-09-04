@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: #070b10;
+  color: #e8eef4;
+  min-height: 100%;
+}
+
+body {
+  background-image:
+    radial-gradient(1200px 500px at 10% -10%, rgba(46, 196, 182, 0.08), transparent 50%),
+    radial-gradient(800px 400px at 100% 0%, rgba(212, 168, 83, 0.05), transparent 45%),
+    linear-gradient(180deg, #0b1117 0%, #070b10 100%);
+  background-attachment: fixed;
+}
+
+.grid-paper {
+  background-image:
+    linear-gradient(rgba(46, 196, 182, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(46, 196, 182, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #223044;
+  border-radius: 99px;
+}
+
+.field {
+  @apply w-full rounded-xl border border-white/10 bg-ink-700 px-3 py-2.5 text-mist-100 placeholder:text-mist-500;
+}
+
+.lake-pin {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+.lake-pin-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 99px;
+  background: #8b9bb0;
+  box-shadow: 0 0 0 2px #070b10;
+  flex-shrink: 0;
+}
+.lake-pin-primary .lake-pin-dot {
+  background: #2ec4b6;
+}
+.lake-pin-catch .lake-pin-dot {
+  background: #d4a853;
+}
+.lake-pin-name {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #e8eef4;
+  text-shadow: 0 1px 2px #070b10, 0 0 8px #070b10;
+  white-space: nowrap;
+}

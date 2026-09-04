@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+data/cache
+data/osm-lac.json
+data/catches.json
+data/config.json
+data/errors.json
+public/uploads
+*.log
+.env
+.env.local
+.DS_Store
+tmp-deploy
