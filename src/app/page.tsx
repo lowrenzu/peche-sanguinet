@@ -84,23 +84,60 @@ export default async function HomePage() {
       <ConditionCards snap={snap} />
 
       {/* ── Hourly timeline ── */}
-      <Panel className="anim-fade-in-up">
-        <div className="flex flex-wrap items-end justify-between gap-2">
-          <div>
-            <Label>Les 24 prochaines heures</Label>
-            <p className="mt-1 text-xs text-mist-500">
-              Anneau = maintenant · ✦ = pic de frénésie.{" "}
-              {snap.window
-                ? `Meilleure fenêtre ${formatTime(snap.window.from)}–${formatTime(snap.window.to)} (IF ${snap.window.peak}).`
-                : "Créneau indisponible."}
-            </p>
+      <div className="anim-fade-in-up space-y-0">
+        {/* Header with stats summary */}
+        <div className="rounded-t-2xl border border-b-0 border-white/10 bg-ink-800/90 px-5 py-4">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h2 className="flex items-center gap-2 text-base font-semibold text-mist-100">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-teal/15">
+                  <Activity className="h-4 w-4 text-teal" />
+                </span>
+                Les 24 prochaines heures
+              </h2>
+              <p className="mt-1 text-xs text-mist-500">
+                Évolution horaire de l&apos;indice de frénésie avec conditions météo.
+              </p>
+            </div>
+            <KindTag kind="modèle" />
           </div>
-          <KindTag kind="modèle" />
+
+          {/* Quick stats row */}
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            {snap.window && (
+              <div className="flex items-center gap-1.5 rounded-lg border border-gold/25 bg-gold/10 px-3 py-1.5">
+                <span className="text-xs font-semibold text-gold">⚡ Pic</span>
+                <span className={`font-mono text-sm font-bold tabular ${scoreColor(snap.window.peak)}`}>
+                  IF {snap.window.peak}
+                </span>
+                <span className="text-xs text-gold/70">
+                  {formatTime(snap.window.from)}–{formatTime(snap.window.to)}
+                </span>
+              </div>
+            )}
+            <div className="flex items-center gap-1.5 rounded-lg border border-white/8 bg-white/5 px-3 py-1.5">
+              <span className="text-xs text-mist-500">Moy.</span>
+              <span className={`font-mono text-sm font-semibold tabular ${scoreColor(
+                Math.round(
+                  snap.hourly.slice(0, 24).reduce((s, h) => s + (h.ifScore ?? 0), 0) /
+                    Math.max(1, snap.hourly.slice(0, 24).filter((h) => h.ifScore != null).length)
+                )
+              )}`}>
+                IF{" "}
+                {Math.round(
+                  snap.hourly.slice(0, 24).reduce((s, h) => s + (h.ifScore ?? 0), 0) /
+                    Math.max(1, snap.hourly.slice(0, 24).filter((h) => h.ifScore != null).length)
+                )}
+              </span>
+            </div>
+          </div>
         </div>
-        <div className="mt-4">
+
+        {/* Chart area */}
+        <div className="rounded-b-2xl border border-t-0 border-white/10 bg-ink-900/70 px-4 py-4">
           <HourlyTimeline points={snap.hourly.slice(0, 24)} />
         </div>
-      </Panel>
+      </div>
 
       {/* ── 72h trend ── */}
       <Panel className="anim-fade-in-up">
