@@ -8,7 +8,7 @@ import { GoFishing } from "@/components/GoFishing";
 import { RefreshButton } from "@/components/RefreshButton";
 import { AlertNotify } from "@/components/AlertNotify";
 import { SpeciesGrid } from "@/components/SpeciesGrid";
-import { KindTag, Label, Panel, Stamp } from "@/components/ui";
+import { KindTag, Label, Panel, Stamp, scoreColor } from "@/components/ui";
 import { formatTime, relativeUpdate } from "@/lib/format";
 import Link from "next/link";
 import { Activity, Map, BookOpen } from "lucide-react";
